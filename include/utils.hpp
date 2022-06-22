@@ -6,4 +6,7 @@
 
 void show_grid(const std::vector<int> &grid);
 
+void make_candidate_matrix(std::vector<int> &candidate_matrix,
+                           const std::vector<int> &grid);
+
 #endif
