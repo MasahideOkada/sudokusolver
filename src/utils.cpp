@@ -62,13 +62,29 @@ void make_candidate_matrix(std::vector<int> &candidate_matrix,
 
 void show_candidates(const std::vector<int> &candidate_matrix){
     int row, col;
+    //to store candidates
+    std::vector<int> candidates;
+    candidates.reserve(9);
+    int num_cands;
     for (int idx=0; idx<81; ++idx){
+        candidates.clear();
         row = idx / 9;
         col = idx % 9;
         std::cout << "(" << row + 1 << ", " << col + 1 << ") : ";
         for (int n=0; n<9; ++n){
+            //store n if n+1 is a candidate
             if (candidate_matrix[9 * idx + n] == 1){
-                std::cout << n + 1 << ", ";
+                candidates.push_back(n);
+            }
+        }
+        num_cands = (int)candidates.size();
+        //show candidates
+        for (int i=0; i<num_cands; ++i){
+            if (i != num_cands - 1){
+                std::cout << candidates[i] + 1 << ", ";
+            }
+            else{
+                std::cout << candidates[i] + 1;
             }
         }
         std::cout << "\n";
