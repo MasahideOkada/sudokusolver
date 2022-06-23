@@ -10,7 +10,7 @@ void show_grid(const std::vector<int> &grid){
         }
         std::cout << "\n";
     }
-    std::cout << std::endl;
+    std::cout << std::flush;
 };
 
 void make_candidate_matrix(std::vector<int> &candidate_matrix,
@@ -73,5 +73,5 @@ void show_candidates(const std::vector<int> &candidate_matrix){
         }
         std::cout << "\n";
     }
-    std::cout << std::endl;
+    std::cout << std::flush;
 }
