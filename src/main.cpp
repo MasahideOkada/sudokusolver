@@ -1,5 +1,6 @@
 #include <iostream>
 #include "utils.hpp"
+#include "basic_techniques.hpp"
 
 int main(void){
     std::vector<int> grid = {
