@@ -1,10 +1,10 @@
 #include "basic_techniques.hpp"
 
-void find_naked_candidates(const std::vector<int> &candidate_matrix, 
-                           std::vector<int> &grid){
-    //the naked candidate means the only single candidate for a blank cell
+void find_naked_singles(const std::vector<int> &candidate_matrix, 
+                        std::vector<int> &grid){
+    //the naked single means the only single candidate for a blank cell
 
-    //store result in [cell idx, cell value] format
+    //store result in [cell idx, value] format
     std::vector<int> result;
     std::vector<std::vector<int>> all_results;
     result.resize(2);
@@ -34,8 +34,6 @@ void find_naked_candidates(const std::vector<int> &candidate_matrix,
                     result[1] = val;
                     all_results.push_back(result);
                     count_result += 1;
-                    //update the grid
-                    grid[idx] = val + 1;
                 }
             }
         }
@@ -43,16 +41,94 @@ void find_naked_candidates(const std::vector<int> &candidate_matrix,
     //show the result
     int row, col;
     if (count_result == 0){
-        std::cout << "No naked candidates\n";
+        std::cout << "No naked singles\n";
     }
     else{
-        std::cout << "Naked candidates found\n";
+        std::cout << "Naked singles found\n";
         for (int c=0; c<count_result; ++c){
             idx = all_results[c][0];
             val = all_results[c][1];
             row = idx / 9;
             col = idx % 9;
             std::cout << "(" << row + 1 << ", " << col + 1 << "): " << val + 1 << "\n";
+            //update the grid
+            grid[idx] = val;
+        }
+    }
+    std::cout << std::flush;
+}
+
+void find_hidden_singles(std::vector<int> &candidate_matrix,
+                         std::vector<int> &grid){
+    //a hidden single is a candidate(value) that appears only once in a block
+
+    //store results in [cell idx, value] format
+    std::vector<int> result;
+    std::vector<std::vector<int>> all_results;
+    result.resize(2);
+    all_results.reserve(81);
+    int count_result = 0;
+    int idx, val;
+
+    std::vector<int> counting_matrix(81, 0);
+    std::vector<int> cells;
+    std::vector<int> vals(1, 0);
+    int num_cands;
+    //region 0 is rows, 1 is columns, and 2 is boxes
+    for (int region=0; region<3; ++region){
+        //count how many times a candidate appears in a region
+        std::fill(counting_matrix.begin(), counting_matrix.end(), 0);
+        count_candidates_in_region(counting_matrix, candidate_matrix, region);
+        
+        //loop for 9 blocks
+        for (int block=0; block<9; ++block){
+            //loop for 9 values
+            for (int v=0; v<9; ++v){
+                cells.clear();
+                num_cands = 0;
+                //check if the value appears only once
+                if (counting_matrix[9 * block + v] == 1){
+                    vals[0] = v;
+                    //find a cell that has the value
+                    find_cells(cells, candidate_matrix, vals, region, block);
+                    idx = cells[0];
+                    val = v;
+                    //get the number of candidates in the cell
+                    for (int n=0; n<9; ++n){
+                        num_cands += candidate_matrix[9 * idx + n];
+                    }
+                    //if the cell has more than one candidate, store the result
+                    if (num_cands > 1){
+                        result[0] = idx;
+                        result[1] = val;
+                        all_results.push_back(result);
+                        count_result += 1;
+                    }
+                }
+            }
+        }
+    }
+    //show the results
+    int row, col;
+    if (count_result == 0){
+        std::cout << "No hidden singles\n";
+    }
+    else{
+        std::cout << "Hidden singles found\n";
+        for (int c=0; c<count_result; ++c){
+            idx = all_results[c][0];
+            val = all_results[c][1];
+            row = idx / 9;
+            col = idx % 9;
+            std::cout << "(" << row + 1 << ", " << col + 1 << "): " << val + 1 << "\n";
+            //update the grid
+            grid[idx] = val + 1;
+            //update the candidate matrix
+            for (int v=0; v<9; ++v){
+                if (v != val){
+                    candidate_matrix[9 * idx + v] = 0;
+                }
+            }            
         }
     }
     std::cout << std::flush;

@@ -5,7 +5,10 @@
 #include <vector>
 #include "utils.hpp"
 
-void find_naked_candidates(const std::vector<int> &candidate_matrix, 
-                           std::vector<int> &grid);
+void find_naked_singles(const std::vector<int> &candidate_matrix, 
+                        std::vector<int> &grid);
+
+void find_hidden_singles(std::vector<int> &candidate_matrix,
+                         std::vector<int> &grid);
 
 #endif
