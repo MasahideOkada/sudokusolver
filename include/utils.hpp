@@ -22,6 +22,12 @@ void find_cells(std::vector<int> &cells,
                 int region, int block);
 
 void get_peer_cells(std::vector<int> &peer_cells,
-                    const int input_cell_index);
+                    const int input_cell_idx);
+
+void get_peer_cells_in_onehot(std::vector<int> &peer_vector,
+                              const int input_cell_idx);
+
+void get_common_cells(std::vector<int> &common_cells,
+                      const std::vector<int> &input_cells);
 
 #endif

@@ -17,7 +17,7 @@ int main(void){
     show_grid(grid);
     std::vector<int> C(81*9, 1);
     make_candidate_matrix(C, grid);
-    //show_candidates(C);
+    show_candidates(C);
     find_naked_singles(C, grid);
     //find_hidden_singles(C, grid);
     show_grid(grid);

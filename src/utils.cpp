@@ -250,3 +250,53 @@ void get_peer_cells(std::vector<int> &peer_cells,
         }   
     }
 }
+
+void get_peer_cells_in_onehot(std::vector<int> &peer_vector,
+                              const int input_cell_idx){
+    //get peer cells in one hot representation
+
+    int row = input_cell_idx / 9;
+    int col = input_cell_idx % 9;
+    int box_row = 3 * (row / 3);
+    int box_col = 3 * (col / 3);
+    int sub_row, sub_col;
+    int row_peer, col_peer, box_peer;
+    //update peer vector
+    for (int i=0; i<9; ++i){
+        row_peer = 9 * row + i;
+        col_peer = 9 * i + col;
+        sub_row = i / 3;
+        sub_col = i % 3;
+        box_peer = 9 * (box_row + sub_row) + (box_col + sub_col);
+        peer_vector[row_peer] = 1;
+        peer_vector[col_peer] = 1;
+        peer_vector[box_peer] = 1;
+    }
+    //get rid of input cell index from the peer vector
+    peer_vector[input_cell_idx] = 0;
+}
+
+void get_common_cells(std::vector<int> &common_cells,
+                      const std::vector<int> &input_cells){
+    //common cells are the intersection of peer cells of input cells
+
+    //store common cells in one hot representation
+    std::vector<int> common_vector(81, 1);
+    //store peer cells in one hot representation
+    std::vector<int> peer_vector(81, 0);
+    //loop for input cells
+    for (auto idx: input_cells){
+        std::fill(peer_vector.begin(), peer_vector.end(), 0);
+        get_peer_cells_in_onehot(peer_vector, idx);
+        //update common vector
+        for (int i=0; i<81; ++i){
+            common_vector[i] *= peer_vector[i];
+        }
+    }
+    //get indices of common cells from common vector
+    for (int i=0; i<81; ++i){
+        if (common_vector[i] == 1){
+            common_cells.push_back(i);
+        }
+    }
+}
