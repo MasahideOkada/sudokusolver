@@ -21,4 +21,7 @@ void find_cells(std::vector<int> &cells,
                 const std::vector<int> &vals,
                 int region, int block);
 
+void get_peer_cells(std::vector<int> &peer_cells,
+                    const int input_cell_index);
+
 #endif

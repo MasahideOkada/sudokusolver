@@ -215,3 +215,38 @@ void find_cells(std::vector<int> &cells,
         }
     }
 }
+
+void get_peer_cells(std::vector<int> &peer_cells,
+                    const int input_cell_idx){
+    //peer cells are cells (20 in total) that exist in the same block as the input cell
+
+    //store peer cells in one hot representation
+    std::vector<int> peer_vector(81, 0);
+    int row = input_cell_idx / 9;
+    int col = input_cell_idx % 9;
+    int box_row = 3 * (row / 3);
+    int box_col = 3 * (col / 3);
+    int sub_row, sub_col;
+    int row_peer, col_peer, box_peer;
+    //update peer vector
+    for (int i=0; i<9; ++i){
+        row_peer = 9 * row + i;
+        col_peer = 9 * i + col;
+        sub_row = i / 3;
+        sub_col = i % 3;
+        box_peer = 9 * (box_row + sub_row) + (box_col + sub_col);
+        peer_vector[row_peer] = 1;
+        peer_vector[col_peer] = 1;
+        peer_vector[box_peer] = 1;
+    }
+    //get rid of input cell index from the peer vector
+    peer_vector[input_cell_idx] = 0;
+    //get indices of peer cells from peer vector
+    int peer_count = 0;
+    for (int i=0; i<81; ++i){
+        if (peer_vector[i] == 1){
+            peer_cells[peer_count] = i;
+            peer_count += 1;
+        }   
+    }
+}

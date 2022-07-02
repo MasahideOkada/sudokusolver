@@ -1,8 +1,11 @@
 #include "basic_techniques.hpp"
 
-void find_naked_singles(const std::vector<int> &candidate_matrix, 
+void find_naked_singles(std::vector<int> &candidate_matrix, 
                         std::vector<int> &grid){
-    //the naked single means the only single candidate for a blank cell
+    /*
+    A naked single means the only single candidate for a blank cell.
+    That means the value can be eliminated from other cells in blocks to which the cell belong.
+    */
 
     //store result in [cell idx, value] format
     std::vector<int> result;
@@ -38,8 +41,9 @@ void find_naked_singles(const std::vector<int> &candidate_matrix,
             }
         }
     }
-    //show the result
+    //show the result and update grid and candidate matrix
     int row, col;
+    std::vector<int> peer_cells(20);
     if (count_result == 0){
         std::cout << "No naked singles\n";
     }
@@ -52,7 +56,12 @@ void find_naked_singles(const std::vector<int> &candidate_matrix,
             col = idx % 9;
             std::cout << "(" << row + 1 << ", " << col + 1 << "): " << val + 1 << "\n";
             //update the grid
-            grid[idx] = val;
+            grid[idx] = val + 1;
+            //update the candidate matrix
+            get_peer_cells(peer_cells, idx);
+            for (auto peer_idx: peer_cells){
+                candidate_matrix[9 * peer_idx + val] = 0;
+            }
         }
     }
     std::cout << std::flush;
@@ -60,7 +69,10 @@ void find_naked_singles(const std::vector<int> &candidate_matrix,
 
 void find_hidden_singles(std::vector<int> &candidate_matrix,
                          std::vector<int> &grid){
-    //a hidden single is a candidate(value) that appears only once in a block
+    /*
+    A hidden single is a candidate(value) that appears in only one blank cell in a block.
+    That means other values can be eliminated from the cell.
+    */
 
     //store results in [cell idx, value] format
     std::vector<int> result;
@@ -132,4 +144,12 @@ void find_hidden_singles(std::vector<int> &candidate_matrix,
         }
     }
     std::cout << std::flush;
+}
+
+void find_naked_tuples(std::vector<int> &candidate_matrix){
+    /* 
+    When a group of N cells in a block has only N candidates in total, their candidates are a naked tuple.
+    That means those values can be eliminated from other cells in the block.
+    */
+
 }
