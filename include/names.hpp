@@ -11,15 +11,15 @@ std::vector<std::string> region_names = {
 };
 
 std::vector<std::string> tuple_names = {
-    "single",
-    "pair",
-    "triple",
-    "quad",
-    "quint",
-    "hexad",
-    "heptad",
-    "octad",
-    "nonad"
+    "singles",
+    "pairs",
+    "triples",
+    "quads",
+    "quints",
+    "hexads",
+    "heptads",
+    "octads",
+    "nonads"
 }
 
 #endif
