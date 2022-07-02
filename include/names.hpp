@@ -20,6 +20,6 @@ std::vector<std::string> tuple_names = {
     "heptads",
     "octads",
     "nonads"
-}
+};
 
 #endif
